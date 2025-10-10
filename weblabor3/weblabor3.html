@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bootstrap Navbar + Alert + Modal + Form + jQuery mini feladatok</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .highlight {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">LOGO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-controls="menu" aria-expanded="false" aria-label="Navigáció váltása">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Főoldal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Kapcsolat</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <h1>Üdvözlünk a weboldalon!</h1>
+    <p id="para">Eredeti bekezdés szöveg.</p>
+
+    <button id="btnText" class="btn btn-info mb-3">Szöveg megváltoztatása</button>
+    <button id="btnToggle" class="btn btn-warning mb-3 ms-2">Highlight kapcsolása</button>
+    <button id="btnAjax" class="btn btn-primary mb-3 ms-2">AJAX GET kérés</button>
+
+    <pre id="result" class="p-3 border bg-light rounded" style="max-height:300px; overflow:auto;"></pre>
+
+    <button id="showAlert" class="btn btn-success mb-3">Mutasd az alertet</button>
+    <button data-bs-toggle="modal" data-bs-target="#infoModal" class="btn btn-success mb-4 ms-2">Részletek</button>
+
+    <div id="alertBox"></div>
+
+    <div class="row g-3 mt-4">
+
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200?random=1" class="card-img-top" alt="Véletlen kép 1" />
+          <div class="card-body">
+            <h5 class="card-title">Első kártya</h5>
+            <p class="card-text">Ez az első kártya leírása.</p>
+            <a href="#" class="btn btn-success">Megnyitás</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200?random=2" class="card-img-top" alt="Véletlen kép 2" />
+          <div class="card-body">
+            <h5 class="card-title">Második kártya</h5>
+            <p class="card-text">Ez a második kártya leírása.</p>
+            <a href="#" class="btn btn-success">Megnyitás</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <img src="https://picsum.photos/300/200?random=3" class="card-img-top" alt="Véletlen kép 3" />
+          <div class="card-body">
+            <h5 class="card-title">Harmadik kártya</h5>
+            <p class="card-text">Ez a harmadik kártya leírása.</p>
+            <a href="#" class="btn btn-success">Megnyitás</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <form id="contactForm" class="p-3 border bg-white rounded mt-5">
+      <input id="name" class="form-control mb-2" placeholder="Név" required />
+      <input id="email" type="email" class="form-control mb-2" placeholder="Email" required />
+      <textarea id="msg" class="form-control mb-2" placeholder="Üzenet"></textarea>
+      <button type="submit" class="btn btn-success">Küldés</button>
+    </form>
+
+    <div id="thanks" class="mt-2 text-success"></div>
+
+  </div>
+
+  <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="infoModalLabel">Cím</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+        </div>
+        <div class="modal-body">
+          <p>Modal tartalma</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    $('#showAlert').on('click', function() {
+      $('#alertBox').empty();
+      const alertElem = $(`
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Siker!</strong> Ez egy zöld Bootstrap alert.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Bezárás"></button>
+        </div>
+      `);
+      $('#alertBox').append(alertElem);
+    });
+
+    $('#infoModal').on('show.bs.modal', function () {
+      $('.modal-body p').text('Tartalom betöltve jQuery-ből.');
+    });
+
+    $('#contactForm').on('submit', function(e){
+      e.preventDefault();
+      const nev = $('#name').val().trim();
+      if (nev) {
+        $('#thanks').text(`Köszönjük, ${nev}!`);
+      } else {
+        $('#thanks').text('Kérjük, add meg a neved!');
+      }
+    });
+
+    $('#btnText').on('click', function(){
+      $('#para').text('Új szöveg');
+    });
+
+    $('#btnToggle').on('click', function(){
+      $('#para').toggleClass('highlight');
+    });
+
+    $('#btnAjax').on('click', function(){
+      $.get('https://httpbin.org/get', function(data){
+        $('#result').text(JSON.stringify(data, null, 2));
+      });
+    });
+  </script>
+
+</body>
+</html>
